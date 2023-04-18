@@ -4,7 +4,7 @@
         "src": "npm run build",
         "use": "@vercel/node",
         "config": {
-          "outputDirectory": "dist" // ou o nome do diretório que você quer que seja a saída
+          "outputDirectory": "dist"
         }
       }
     ]
