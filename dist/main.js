@@ -14,7 +14,7 @@ async function bootstrap() {
         .setTitle('CAF Nest API')
         .setDescription('API criada em Nest.JS referente ao bootcamp II da BLUE')
         .setVersion('1.0')
-        .addServer('http://localhost:3333/docs')
+        .addServer('https://backend-caf-v2-production.up.railway.app/docs')
         .addTag('cats')
         .addBearerAuth()
         .build();
