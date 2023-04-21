@@ -15,7 +15,7 @@ async function bootstrap() {
         .setDescription('API criada em Nest.JS referente ao bootcamp II da BLUE')
         .setVersion('1.0')
         .addServer('https://backend-caf-v2-production.up.railway.app/docs')
-        .addTag('cats')
+        .addTag('User')
         .addBearerAuth()
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, config);
