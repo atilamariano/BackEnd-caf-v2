@@ -6,6 +6,8 @@ import {
   MinLength,
   IsEmail,
   IsBoolean,
+  MaxLength,
+  Matches,
 } from 'class-validator';
 import { CreateUserDto } from './create-user.dto';
 
@@ -20,8 +22,11 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   email?: string;
 
   @IsString()
-  @IsNotEmpty()
-  @MinLength(8)
+  @MinLength(6)
+  @MaxLength(20)
+  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+    message: 'password too weak',
+  })
   @ApiPropertyOptional({
     example: 'NovaSenha@2',
     description: 'Sua nova senha de acesso com no mínimo 8 caracteres.',

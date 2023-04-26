@@ -4,9 +4,23 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export declare class UserService {
     private readonly prisma;
     constructor(prisma: PrismaService);
-    create(createUserDto: CreateUserDto): string;
-    findAll(): string;
-    findOne(id: number): string;
-    update(id: number, updateUserDto: UpdateUserDto): string;
-    remove(id: number): string;
+    create(createUserDto: CreateUserDto): Promise<{
+        password: any;
+        id: number;
+        name: string;
+        email: string;
+        balance: number;
+        isActive: boolean;
+    }>;
+    findAll(): Promise<import(".prisma/client").User[]>;
+    findOne(id: number): Promise<import(".prisma/client").User>;
+    update(id: number, updateUserDto: UpdateUserDto): Promise<{
+        password: any;
+        id: number;
+        name: string;
+        email: string;
+        balance: number;
+        isActive: boolean;
+    }>;
+    remove(id: number): Promise<import(".prisma/client").User>;
 }

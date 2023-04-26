@@ -28,8 +28,11 @@ __decorate([
 ], UpdateUserDto.prototype, "email", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.MinLength)(8),
+    (0, class_validator_1.MinLength)(6),
+    (0, class_validator_1.MaxLength)(20),
+    (0, class_validator_1.Matches)(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+        message: 'password too weak',
+    }),
     (0, swagger_2.ApiPropertyOptional)({
         example: 'NovaSenha@2',
         description: 'Sua nova senha de acesso com no mínimo 8 caracteres.',

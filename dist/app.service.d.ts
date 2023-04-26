@@ -1,3 +1,3 @@
 export declare class AppService {
-    getURL(): string;
+    getHello(): string;
 }
