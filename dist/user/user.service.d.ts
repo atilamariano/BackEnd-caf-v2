@@ -12,6 +12,7 @@ export declare class UserService {
         balance: number;
         isActive: boolean;
     }>;
+    findByEmail(email: string): import(".prisma/client").Prisma.Prisma__UserClient<import(".prisma/client").User, never>;
     findAll(): Promise<import(".prisma/client").User[]>;
     findOne(id: number): Promise<import(".prisma/client").User>;
     update(id: number, updateUserDto: UpdateUserDto): Promise<{

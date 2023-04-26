@@ -22,6 +22,9 @@ let UserService = class UserService {
         const createdUser = await this.prisma.user.create({ data });
         return Object.assign(Object.assign({}, createdUser), { password: undefined });
     }
+    findByEmail(email) {
+        return this.prisma.user.findUnique({ where: { email } });
+    }
     async findAll() {
         return this.prisma.user.findMany();
     }
