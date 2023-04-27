@@ -14,7 +14,9 @@ export class AuthService {
     private readonly userService: UserService,
   ) {}
 
-  async login(user: User): Promise<UserToken> {
+  async login(email: string, password: string): Promise<UserToken> {
+    const user = await this.validateUser(email, password);
+
     const payload: UserPayload = {
       sub: user.id,
       email: user.email,
@@ -29,15 +31,8 @@ export class AuthService {
   async validateUser(email: string, password: string): Promise<User> {
     const user = await this.userService.findByEmail(email);
 
-    if (user) {
-      const isPasswordValid = await bcrypt.compare(password, user.password);
-
-      if (isPasswordValid) {
-        return {
-          ...user,
-          password: undefined,
-        };
-      }
+    if (user && (await bcrypt.compare(password, user.password))) {
+      return user;
     }
 
     throw new UnauthorizedError(

@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { LoginValidationMiddleware } from './middlewares/login-validation.middleware';
+import { SwaggerAuthController } from './swagger/swagger-auth.controller';
 
 @Module({
   imports: [
@@ -17,11 +18,11 @@ import { LoginValidationMiddleware } from './middlewares/login-validation.middle
       signOptions: { expiresIn: '30d' },
     }),
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, SwaggerAuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy],
 })
 export class AuthModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoginValidationMiddleware).forRoutes('login');
+    consumer.apply(LoginValidationMiddleware).forRoutes('auth/login');
   }
 }
