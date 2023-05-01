@@ -15,11 +15,19 @@ const auth_module_1 = require("./auth/auth.module");
 const jwt_auth_guard_1 = require("./auth/guards/jwt-auth.guard");
 const prisma_module_1 = require("./prisma/prisma.module");
 const user_module_1 = require("./user/user.module");
+const transaction_module_1 = require("./transaction/transaction.module");
+const admin_module_1 = require("./admin/admin.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [prisma_module_1.PrismaModule, user_module_1.UserModule, auth_module_1.AuthModule],
+        imports: [
+            prisma_module_1.PrismaModule,
+            user_module_1.UserModule,
+            auth_module_1.AuthModule,
+            transaction_module_1.TransactionModule,
+            admin_module_1.AdminModule,
+        ],
         controllers: [app_controller_1.AppController],
         providers: [
             app_service_1.AppService,

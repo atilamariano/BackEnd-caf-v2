@@ -12,6 +12,6 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async login(@Body() loginDto: LoginDto) {
     const { email, password } = loginDto;
-    return this.authService.login(email, password);
+    return this.authService.login(loginDto);
   }
 }

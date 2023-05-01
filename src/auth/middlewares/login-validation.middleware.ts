@@ -1,29 +1,18 @@
-import {
-  BadRequestException,
-  Injectable,
-  NestMiddleware,
-} from '@nestjs/common';
-import { NextFunction, Request, Response } from 'express';
-import { LoginRequestBody } from '../models/LoginRequestBody';
-import { validate } from 'class-validator';
+import { Injectable, NestMiddleware } from '@nestjs/common';
+import { Request, Response, NextFunction } from 'express';
+import { AuthService } from '../auth.service';
 
 @Injectable()
 export class LoginValidationMiddleware implements NestMiddleware {
+  constructor(private readonly authService: AuthService) {}
+
   async use(req: Request, res: Response, next: NextFunction) {
-    const body = req.body;
+    const authorization = req.headers.authorization;
 
-    const loginRequestBody = new LoginRequestBody();
-    loginRequestBody.email = body.email;
-    loginRequestBody.password = body.password;
-
-    const validations = await validate(loginRequestBody);
-
-    if (validations.length) {
-      throw new BadRequestException(
-        validations.reduce((acc, curr) => {
-          return [...acc, ...Object.values(curr.constraints)];
-        }, []),
-      );
+    if (authorization && authorization.startsWith('Bearer ')) {
+      const token = authorization.slice(7, authorization.length);
+      const decoded = this.authService.verifyToken(token);
+      req.user = decoded;
     }
 
     next();

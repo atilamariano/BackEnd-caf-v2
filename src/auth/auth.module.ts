@@ -8,10 +8,12 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { LoginValidationMiddleware } from './middlewares/login-validation.middleware';
 import { SwaggerAuthController } from './swagger/swagger-auth.controller';
+import { AdminModule } from 'src/admin/admin.module';
 
 @Module({
   imports: [
     UserModule,
+    AdminModule,
     PassportModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,
@@ -23,6 +25,8 @@ import { SwaggerAuthController } from './swagger/swagger-auth.controller';
 })
 export class AuthModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoginValidationMiddleware).forRoutes('auth/login');
+    consumer.apply(LoginValidationMiddleware).forRoutes('/login');
   }
 }
+
+console.log(JwtModule);

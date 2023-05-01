@@ -1,42 +1,64 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { UnauthorizedError } from './errors/unauthorized.error';
-import { User } from '../user/entities/user.entity';
-import { UserService } from '../user/user.service';
-import { UserPayload } from './models/UserPayload';
-import { UserToken } from './models/UserToken';
+import { AdminService } from 'src/admin/admin.service';
+import { User } from 'src/user/entities/user.entity';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class AuthService {
+  getAuthToken() {
+    throw new Error('Method not implemented.');
+  }
   constructor(
-    private readonly jwtService: JwtService,
     private readonly userService: UserService,
+    private readonly adminService: AdminService,
+    private readonly jwtService: JwtService,
   ) {}
 
-  async login(email: string, password: string): Promise<UserToken> {
-    const user = await this.validateUser(email, password);
+  async validateUser(email: string, password: string): Promise<User> {
+    const user = await this.userService.findByEmail(email);
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+    return user;
+  }
 
-    const payload: UserPayload = {
-      sub: user.id,
-      email: user.email,
-      name: user.name,
-    };
+  async validateAdmin(email: string, password: string): Promise<any> {
+    const admin = await this.adminService.findByEmail(email);
+    if (!admin) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+    const isMatch = await bcrypt.compare(password, admin.password);
+    if (!isMatch) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+  }
 
+  async login(user: User | any) {
+    const payload = { email: user.email, sub: user.id };
     return {
       access_token: this.jwtService.sign(payload),
     };
   }
 
-  async validateUser(email: string, password: string): Promise<User> {
-    const user = await this.userService.findByEmail(email);
+  async loginAdmin(admin: any) {
+    const payload = { email: admin.email, sub: admin.id };
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
+  }
 
-    if (user && (await bcrypt.compare(password, user.password))) {
-      return user;
+  async verifyToken(token: string): Promise<any> {
+    try {
+      const decoded = await this.jwtService.verifyAsync(token);
+      return decoded;
+    } catch (error) {
+      return null;
     }
-
-    throw new UnauthorizedError(
-      'Email address or password provided is incorrect.',
-    );
   }
 }
