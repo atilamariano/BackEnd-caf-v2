@@ -22,6 +22,7 @@ import { AdminModule } from 'src/admin/admin.module';
   ],
   controllers: [AuthController, SwaggerAuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy],
+  exports: [AuthService],
 })
 export class AuthModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
